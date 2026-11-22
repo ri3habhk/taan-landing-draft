@@ -41,6 +41,17 @@ function titlePair(c,h,left,right,dark=false){const ink=dark?C.forest:C.cream;la
 // Each illustration keeps the original paper palette, engraving and grain.
 // Its labels are stationary; motion demonstrates one concrete product action.
 function g1(c,t){
+ grain(c,800,470,C.forest,'#204638');titlePair(c,470,'EDIT THE PHRASE. KEEP THE PERFORMANCE.','GRANULAR CONTROL');
+ const phase=(t%10)/10,edit=smooth((phase-.22)/.28),x=151,w=605,start=355,end=516;
+ label(c,40,80,'“Make only this melody phrase brighter.”',26,C.cream);
+ for(let i=0;i<=6;i++){const xx=x+i*w/6;label(c,xx,119,(i*4)+'s',16,C.cream,'center');}
+ ['MELODY','BASS','DRUMS'].forEach((name,i)=>{let y=174+i*82;label(c,30,y+6,name,18,C.cream);rect(c,x,y-28,w,56,i===0?C.cream:C.teal,3);
+ if(i===0){rect(c,start,y-28,end-start,56,C.yellow,3);for(let j=0;j<19;j++){const nx=x+17+j*31,selected=nx>start&&nx<end;note(c,nx,y+Math.sin(j*1.8)*(selected?12-edit*7:12)-(selected?edit*10:0),.42,C.forest,false);}c.save();c.setLineDash([5,4]);c.strokeStyle=C.yellow;c.lineWidth=2;c.strokeRect(start-5,y-36,end-start+10,72);c.restore();}
+ else waveform(c,x+10,y,w-20,24,0,i===1?C.cream:C.lime,i*2,6);});
+ const play=x+phase*w;line(c,play,137,play,375,C.rust,3);circle(c,play,132,5,C.rust);
+ label(c,400,406,edit<.95?'Only the selected phrase is changing.':'Melody updated. Bass and drums untouched.',22,C.cream,'center');label(c,400,437,'SAME TRACK · CONTINUOUS PLAYBACK · NO REGENERATION',16,C.lime,'center');
+}
+function g2(c,t){
  grain(c,800,470,C.forest,'#204638');titlePair(c,470,'VIDEO. SCRIPT. REFERENCE AUDIO.','01 / INPUTS');
  film(c,45,82,270,163,t);label(c,47,273,'VIDEO',23,C.cream);
  c.save();c.translate(56,299);c.rotate(-.035);rect(c,0,0,131,96,C.yellow,3);label(c,13,25,'A quiet street.',14,C.forest);label(c,13,47,'A sudden turn.',14,C.forest);label(c,13,69,'A bright ending.',14,C.forest);c.restore();
@@ -52,7 +63,13 @@ function g1(c,t){
  const scan=525+(1-Math.cos(t*TAU/10))*98;line(c,scan,114,scan,331,C.cream,2);
  ribbon(c,458,366,298,44,t,C.cream,C.forest);label(c,750,427,'YOUR TRACK',23,C.cream,'right');
 }
-function g2(c,t){
+function g3(c,t){
+ grain(c,800,470,C.cream,'#d9c797');titlePair(c,470,'CAPABILITIES BUILT INTO THE ARCHITECTURE.','02 / CONTROL',true);
+ label(c,38,78,'HUM · NOTES · MIDI · IMAGE · VIDEO · SCRIPT',19,C.forest);arrow(c,665,72,45,C.forest);label(c,750,78,'PLAN',18,C.forest,'right');
+ rect(c,36,103,728,128,C.forest,4);label(c,56,133,'“Drop the beat at 0:12.”',23,C.cream);const scan=58+(t%8)/8*680;waveform(c,58,179,680,46,0,C.lime,2,5);line(c,466,145,466,219,C.yellow,3);label(c,466,218,'0:12',16,C.yellow,'center');line(c,scan,149,scan,200,C.cream,2);if(scan>=466){rect(c,548,112,198,31,C.yellow,3);label(c,647,134,'BEAT DROPS · 0:12',16,C.forest,'center');}
+ ['MELODY','BASS','DRUMS'].forEach((name,i)=>{const y=275+i*48;label(c,38,y+5,name,16,C.forest);rect(c,135,y-18,475,36,i===0?C.yellow:'#dfdbbd',2);waveform(c,145,y,455,17,i===0?t:0,C.forest,i+2,6);line(c,145+(t%8)/8*455,y-18,145+(t%8)/8*455,y+18,C.rust,2);label(c,630,y+5,i===0?'EDIT THIS PART':'KEEPS PLAYING',14,C.forest);});label(c,400,430,'Change one layer. Keep the music playing.',21,C.forest,'center');
+}
+function g4(c,t){
  grain(c,800,470,C.forest,'#295040');titlePair(c,470,'MUSIC IS MADE IN STEPS.','01 / THE PROCESS');
  const phase=(t%12)/4;
  ['DIRECTOR','COMPOSER','PERFORMER'].forEach((name,i)=>{const x=36+i*251;rect(c,x,83,225,270,i===1?C.cream:C.yellow,5);const ink=C.forest;label(c,x+20,119,name,23,ink);label(c,x+20,145,['Plan the piece','Write the score','Play the music'][i],17,ink);
@@ -61,24 +78,6 @@ function g2(c,t){
  if(i===2){waveform(c,x+18,236,190,90,phase>2?t:0,ink,2,6);label(c,x+112,320,'YOUR MUSIC',18,ink,'center');}
  line(c,x+112,376,x+112,353,C.cream,2);label(c,x+112,403,['What plays','When it plays','How it changes'][i],19,C.cream,'center');if(i<2)arrow(c,x+227,225,21,C.cream);
  if(Math.floor(phase)===i){line(c,x,72,x+225,72,C.lime,5);circle(c,x+225*(phase-i),72,6,C.cream);}});
-}
-function g3(c,t){
- grain(c,800,470,C.cream,'#d9c797');titlePair(c,470,'CAPABILITIES BUILT INTO THE ARCHITECTURE.','02 / CONTROL',true);
- label(c,38,78,'HUM · NOTES · MIDI · IMAGE · VIDEO · SCRIPT',19,C.forest);arrow(c,665,72,45,C.forest);label(c,750,78,'PLAN',18,C.forest,'right');
- rect(c,36,103,728,128,C.forest,4);label(c,56,133,'“Drop the beat at 0:12.”',23,C.cream);const scan=58+(t%8)/8*680;waveform(c,58,179,680,46,0,C.lime,2,5);line(c,466,145,466,219,C.yellow,3);label(c,466,218,'0:12',16,C.yellow,'center');line(c,scan,149,scan,200,C.cream,2);if(scan>=466){rect(c,548,112,198,31,C.yellow,3);label(c,647,134,'BEAT DROPS · 0:12',16,C.forest,'center');}
- ['MELODY','BASS','DRUMS'].forEach((name,i)=>{const y=275+i*48;label(c,38,y+5,name,16,C.forest);rect(c,135,y-18,475,36,i===0?C.yellow:'#dfdbbd',2);waveform(c,145,y,455,17,i===0?t:0,C.forest,i+2,6);line(c,145+(t%8)/8*455,y-18,145+(t%8)/8*455,y+18,C.rust,2);label(c,630,y+5,i===0?'EDIT THIS PART':'KEEPS PLAYING',14,C.forest);});label(c,400,430,'Change one layer. Keep the music playing.',21,C.forest,'center');
-}
-function g4(c,t){
- grain(c,800,470,C.forest,'#204638');titlePair(c,470,'ONE EDIT. THE SAME SONG.','04 / GRANULAR CONTROL');
- const x=158,w=577,unit=w/20,p=smooth((t-.55)/2.85),before=x+8*unit,start=x+(8-3*p)*unit,len=10*unit;
- for(let i=0;i<=20;i++){const xx=x+i*unit;line(c,xx,77,xx,i%5?82:90,C.teal,1);if(i%5===0)label(c,xx,108,i+'s',19,C.cream,'center');}
- label(c,30,170,'Violin',24,C.cream);label(c,30,266,'Piano',24,C.cream);label(c,30,361,'Drums',24,C.cream);
- rect(c,x,130,w,73,C.ink,4);c.save();c.setLineDash([5,6]);c.strokeStyle=C.cream;c.lineWidth=1.5;c.strokeRect(before,140,len,54);c.restore();
- rect(c,start,137,len,59,C.yellow,3);waveform(c,start+15,168,len-30,27,p*.7,C.forest,1.5,5);
- label(c,start+len/2,226,'Start 8s → 5s · happier violin',21,C.cream,'center');
- rect(c,x+unit,240,unit*15,63,C.teal,3);waveform(c,x+unit+12,268,unit*15-24,28,0,C.cream,2.2,5);label(c,740,320,'PIANO UNCHANGED',15,C.cream,'right');
- rect(c,x,335,w,59,C.teal,3);waveform(c,x+13,364,w-26,25,0,C.lime,3.3,5);
- label(c,49,428,'ONLY THE REQUESTED PART CHANGES',20,C.cream);label(c,747,428,'DRUMS UNCHANGED',15,C.cream,'right');
 }
 function portraitBase(c,left,right){grain(c,800,760,C.cream,'#d7c89f');label(c,42,42,left,22,C.forest);label(c,758,42,right,20,C.forest,'right');}
 function portraitD1(c,t){portraitBase(c,'MADE FOR YOUR FILM.','01 / ORIGINAL');
