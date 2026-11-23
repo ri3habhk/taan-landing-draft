@@ -18,7 +18,7 @@ const ranges=[[.27,.433],[.434,.586],[.637,.768],[.814,.980]];
 function measure(){mobile=innerWidth<=800;viewHeight=stage.clientHeight;experienceTop=experience.getBoundingClientRect().top+scrollY;scrollRange=experience.offsetHeight-viewHeight;
  $$('.scroll-anchor').forEach(a=>a.style.top=Number(a.dataset.progress)*scrollRange+'px');
  const copy=$('.hero-copy'),cta=$('.hero-actions'),prompt=$('.hero-prompt');
- copy.style.top=(viewHeight<480?82:Math.max(mobile?86:110,viewHeight*(mobile?.12:.13))+Math.min(mobile?28:72,viewHeight*(mobile?.035:.065)))+'px';
+ copy.style.top=(viewHeight<480?82:Math.max(mobile?86:110,viewHeight*(mobile?.12:.13)))+'px';
  cta.style.top=(copy.offsetTop+copy.offsetHeight+(viewHeight<700?14:20))+'px';prompt.style.top=(copy.offsetTop+copy.offsetHeight+(viewHeight<700?14:20)+cta.offsetHeight+(viewHeight<700?16:24))+'px';
  cta.style.minWidth='';cta.style.minHeight='';
  const intro=$('[data-scene=intro]');intro.style.top=(viewHeight/2-intro.offsetHeight/2)+'px';
