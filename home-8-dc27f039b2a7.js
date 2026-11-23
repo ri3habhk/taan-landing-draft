@@ -19,7 +19,14 @@ function measure(){mobile=innerWidth<=800;viewHeight=stage.clientHeight;experien
  $$('.scroll-anchor').forEach(a=>a.style.top=Number(a.dataset.progress)*scrollRange+'px');
  const copy=$('.hero-copy'),cta=$('.hero-actions'),prompt=$('.hero-prompt');
  copy.style.top=(viewHeight<480?82:Math.max(mobile?86:110,viewHeight*(mobile?.12:.13)))+'px';
- cta.style.top=(copy.offsetTop+copy.offsetHeight+(viewHeight<700?14:20))+'px';prompt.style.top=(copy.offsetTop+copy.offsetHeight+(viewHeight<700?14:20)+cta.offsetHeight+(viewHeight<700?16:24))+'px';
+ if(!mobile){
+  // Figma desktop: copy y=130, actions y=334, prompt y=402.
+  cta.style.top=(copy.offsetTop+204)+'px';
+  prompt.style.top=(copy.offsetTop+272)+'px';
+ }else{
+  cta.style.top=(copy.offsetTop+copy.offsetHeight+(viewHeight<700?14:20))+'px';
+  prompt.style.top=(copy.offsetTop+copy.offsetHeight+(viewHeight<700?14:20)+cta.offsetHeight+(viewHeight<700?16:24))+'px';
+ }
  cta.style.minWidth='';cta.style.minHeight='';
  const intro=$('[data-scene=intro]');intro.style.top=(viewHeight/2-intro.offsetHeight/2)+'px';
 
