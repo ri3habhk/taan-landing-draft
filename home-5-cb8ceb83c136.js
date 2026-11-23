@@ -70,15 +70,36 @@ function g3(c,t){
  ['MELODY','BASS','DRUMS'].forEach((name,i)=>{const y=275+i*48;label(c,38,y+5,name,16,C.forest);rect(c,135,y-18,475,36,i===0?C.yellow:'#dfdbbd',2);waveform(c,145,y,455,17,i===0?t:0,C.forest,i+2,6);line(c,145+(t%8)/8*455,y-18,145+(t%8)/8*455,y+18,C.rust,2);label(c,630,y+5,i===0?'EDIT THIS PART':'KEEPS PLAYING',14,C.forest);});label(c,400,430,'Change one layer. Keep the music playing.',21,C.forest,'center');
 }
 function g4(c,t){
- grain(c,800,470,C.forest,'#295040');titlePair(c,470,'MUSIC IS MADE IN STEPS.','01 / THE PROCESS');
- const phase=(t%12)/4;
- ['DIRECTOR','COMPOSER','PERFORMER'].forEach((name,i)=>{const x=36+i*251;rect(c,x,83,225,270,i===1?C.cream:C.yellow,5);const ink=C.forest;label(c,x+20,119,name,23,ink);label(c,x+20,145,['Plan the piece','Write the score','Play the music'][i],17,ink);
- if(i===0){['0:00 · Build tension','0:12 · Beat drops','0:24 · Resolve'].forEach((v,j)=>{rect(c,x+14,176+j*48,197,36,j===1?C.forest:C.cream,2);label(c,x+23,200+j*48,v,17,j===1?C.cream:ink);});}
- if(i===1){for(let j=0;j<5;j++)line(c,x+18,205+j*15,x+207,205+j*15,ink,1);for(let j=0;j<6;j++){c.globalAlpha=Math.max(.2,Math.min(1,(phase-1)*4-j*.3));note(c,x+30+j*30,235+Math.sin(j)*20,.8,ink);}c.globalAlpha=1;}
- if(i===2){waveform(c,x+18,236,190,90,phase>2?t:0,ink,2,6);label(c,x+112,320,'YOUR MUSIC',18,ink,'center');}
- line(c,x+112,376,x+112,353,C.cream,2);label(c,x+112,403,['What plays','When it plays','How it changes'][i],19,C.cream,'center');if(i<2)arrow(c,x+227,225,21,C.cream);
- if(Math.floor(phase)===i){line(c,x,72,x+225,72,C.lime,5);circle(c,x+225*(phase-i),72,6,C.cream);}});
+ grain(c,800,470,C.forest,'#295040');
+ const phase=preferReduced||matchMedia('(prefers-reduced-motion: reduce)').matches?12:t%15,writing=smooth((phase-4)/5),playing=phase>=9;
+ titlePair(c,470,'YOUR DIRECTION. YOUR MUSIC.','HOW YOU USE TAAN');
+ // One brief remains visible as its timing becomes a score, then playback.
+ const brief='7/8 piano. Bass at 0:06. Half-time drums at 0:12.';
+ label(c,38,78,'YOU',14,C.lime);
+ label(c,38,111,phase<2?brief.slice(0,Math.floor(phase/2*brief.length)):brief,24,C.cream);
+ if(phase<2)line(c,38+c.measureText(brief.slice(0,Math.floor(phase/2*brief.length))).width+5,89,38+c.measureText(brief.slice(0,Math.floor(phase/2*brief.length))).width+5,114,C.yellow,2);
+ const x=153,w=603,drop=x+w*.4;
+ ['PLAN','WRITE','PLAY'].forEach((word,i)=>{const xx=38+i*265,active=i===(phase<4?0:phase<9?1:2);label(c,xx,155,word,18,active?C.yellow:C.cream);line(c,xx,165,xx+194,165,active?C.yellow:C.teal,active?3:1);});
+ for(let i=0;i<=5;i++)label(c,x+i*w/5,197,'0:'+String(i*6).padStart(2,'0'),14,C.cream,'center');
+ const plan=smooth((phase-2)/2);c.globalAlpha=.3+.7*plan;
+ line(c,x,218,drop,218,C.lime,4);line(c,drop,218,x+w,218,C.yellow,4);
+ label(c,x+12,241,'7/8 · BASS AT 0:06',14,C.lime);label(c,drop+12,241,'HALF-TIME DRUMS · 0:12',14,C.yellow);c.globalAlpha=1;
+ ['PIANO','BASS','DRUMS'].forEach((name,i)=>{
+  const y=277+i*44;label(c,38,y+6,name,17,C.cream);line(c,x,y+16,x+w,y+16,C.teal,1);
+  const start=i===2?drop:i===1?x+w*.2:x,count=i===2?12:20;
+  for(let j=0;j<count;j++){
+   const nx=start+12+j*(x+w-start-25)/count,visible=clamp(writing*1.4-i*.15-j*.018);
+   c.globalAlpha=visible;
+   if(i===0)note(c,nx,y+Math.sin(j*1.3)*6,.36,C.cream,false);
+   else rect(c,nx,y-(i===2?5:3),i===2?7:18,i===2?10:6,i===2?C.yellow:C.lime,2);
+  }c.globalAlpha=1;
+ });
+ line(c,drop,207,drop,384,C.yellow,1);
+ if(playing){const play=x+clamp((phase-9)/5)*w;line(c,play,252,play,384,C.cream,2);circle(c,play,251,4,C.cream);}
+ const caption=phase<4?'Give Taan a brief and exact timing.':phase<9?'Taan turns your direction into an arranged score.':phase<11?'Play your track. Bass joins at 0:06.':'0:12 — half-time drums enter on cue.';
+ label(c,400,419,caption,20,C.cream,'center');
 }
+
 function portraitBase(c,left,right){grain(c,800,760,C.cream,'#d7c89f');label(c,42,42,left,22,C.forest);label(c,758,42,right,20,C.forest,'right');}
 function portraitD1(c,t){portraitBase(c,'MADE FOR YOUR FILM.','01 / ORIGINAL');
  c.save();c.translate(400,277);c.rotate(t*.1);circle(c,0,0,171,C.forest);for(let i=0;i<23;i++){c.beginPath();c.arc(0,0,47+i*4.7,0,TAU);c.strokeStyle=i%3?C.lime:C.yellow;c.lineWidth=2;c.stroke();}circle(c,0,0,46,C.yellow);circle(c,0,0,8,C.forest);c.restore();
